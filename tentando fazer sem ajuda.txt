@@ -1,6 +1,0 @@
-vai dar bom!
-
-
-tentando usar o git diff...
-
-tinha dado erro, bora ver agora
