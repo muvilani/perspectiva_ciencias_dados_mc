@@ -1,0 +1,14 @@
+RESUMO ESTATÍSTICO DE VENDAS - MARÇO 2026
+========================================
+Total de Vendas (Top 50): 222317
+Média de Vendas por Modelo: 4446.34
+Modelo mais Vendido: FIAT STRADA
+Marca com mais Vendas: FIAT
+
+TOP 5 MARCAS POR VOLUME:
+MARCA
+FIAT         51469
+VW           40733
+CHEVROLET    26757
+HYUNDAI      19042
+BYD          15234
