@@ -1,0 +1,57 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+#!pip install seaborn
+import seaborn as sns
+
+def realizar_analise_vendas():
+    df = pd.read_csv('vendas_marco.csv') # Carrega o CSV que acabamos de criar
+    
+    col_vendas = df.columns[2] # Identifica a coluna de vendas (ex: 'MAR.2026')
+    df[col_vendas] = pd.to_numeric(df[col_vendas], errors='coerce') # Garante que a coluna é numérica
+    
+    # 1. Gráfico de Barras: Top 10 Modelos mais Vendidos
+    plt.figure(figsize=(12, 8))
+    top_10 = df.head(10) # Pega os 10 primeiros, que já estão ordenados por vendas
+    sns.barplot(data=top_10, x=col_vendas, y='MODELO', palette='Blues_d') # Cria o gráfico de barras
+    plt.title('Top 10 Carros Mais Vendidos - Março 2026')
+    plt.xlabel('Unidades Vendidas')
+    plt.ylabel('Modelo')
+    plt.tight_layout()
+    plt.savefig('top_10_vendas.png') # Salva o gráfico como imagem
+    
+    # 2. Análise por Marca (Extraindo a primeira palavra do modelo)
+    # Cria uma nova coluna 'MARCA' pegando a primeira palavra do nome do modelo (ex: 'FIAT STRADA' -> 'FIAT')
+    df['MARCA'] = df['MODELO'].apply(lambda x: x.split()[0])
+    # Agrupa as vendas por marca e soma as unidades vendidas, depois ordena
+    vendas_por_marca = df.groupby('MARCA')[col_vendas].sum().sort_values(ascending=False)
+    
+    plt.figure(figsize=(12, 8))
+    sns.barplot(x=vendas_por_marca.values, y=vendas_por_marca.index, palette='Reds_d')
+    plt.title('Vendas Totais por Marca - Março 2026')
+    plt.xlabel('Unidades Vendidas')
+    plt.ylabel('Marca')
+    plt.tight_layout()
+    plt.savefig('vendas_por_marca.png')
+    
+    # 3. Resumo Estatístico
+    resumo = {
+        'Total de Vendas (Top 50)': df[col_vendas].sum(),
+        'Média de Vendas por Modelo': df[col_vendas].mean(),
+        'Modelo mais Vendido': df.iloc[0]['MODELO'], # O primeiro modelo é o mais vendido
+        'Marca com mais Vendas': vendas_por_marca.index[0] # A primeira marca é a com mais vendas
+    }
+    
+    with open('resumo_vendas.txt', 'w') as f:
+        f.write("RESUMO ESTATÍSTICO DE VENDAS - MARÇO 2026\n")
+        f.write("="*40 + "\n")
+        for k, v in resumo.items():
+            f.write(f"{k}: {v}\n")
+        f.write("\nTOP 5 MARCAS POR VOLUME:\n")
+        f.write(vendas_por_marca.head(5).to_string())
+
+if __name__ == "__main__":
+    realizar_analise_vendas()
+    print("Análise de vendas concluída!")
+
+
+    
